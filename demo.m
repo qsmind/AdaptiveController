@@ -1,4 +1,4 @@
-steptime=0.02; % 单步时间
+steptime=0.01; % 单步时间
 start_t=0;  %开始时间
 end_t=200;   %结束时间
  %保存结果
@@ -170,10 +170,12 @@ N=[-m*I_3 O_3;O_3 J];
 B=[R*func_S(p_t);R];
 A=[O_3 O_3;func_S(rho) O_3];
 
+eta=R'*(omega-omega_e);
+
 de_1=C_1*e_1+C_2*e_2;
 de_2=(M^-1)*(h+N*B*(J_t^-1)*func_S(eta)*J_t*eta+(I_6+A)*u+d);
 
-eta=R'*(omega-omega_e);
+
 
 % ====================
 
@@ -250,92 +252,115 @@ result_rho_tip_3=[result_rho_tip_3,rho_tip(3)];
 
 end
 
+% 画图
 t=start_t:steptime:end_t;
 
+% ================================================================================================
+figure(1)
 %绘制phi
-figure
+% figure
+subplot(3,1,1)
 plot(t,result_phi_e_1,':',t,result_phi_e_2,'--',t,result_phi_e_3,'-')
 % ylim([-50 50])
-xlabel('t(s)')
-ylabel('\Phi_e(deg)')
-legend('\Phi_e_1','\Phi_e_2','\Phi_e_3')
+% xlabel('t(s)')
+ylabel('$ \Phi_e(deg) $','Interpreter','latex','Fontsize',12)
+legend({'$ {\Phi_e}_1 $','$ {\Phi_e}_2 $','$ {\Phi_e}_3 $'},'Interpreter','latex','Fontsize',12)
 
 %绘制omega
-figure
+% figure
+subplot(3,1,2)
 plot(t,result_omega_e_1,':',t,result_omega_e_2,'--',t,result_omega_e_3,'-')
 % ylim([-50 50])
-xlabel('t(s)')
-ylabel('\omega_e(rad/s)')
-legend('\omega_e_1','\omega_e_2','\omega_e_3')
+% xlabel('t(s)')
+ylabel('$\omega_e(rad/s)$','Interpreter','latex','Fontsize',12)
+legend({'${\omega_e}_1$','${\omega_e}_2$','${\omega_e}_3$'},'Interpreter','latex','Fontsize',12)
 
 %绘制tau
-figure
+% figure
+subplot(3,1,3)
 plot(t,result_tau_1,':',t,result_tau_2,'--',t,result_tau_3,'-')
 % ylim([-50 50])
-xlabel('t(s)')
-ylabel('\tau(Nm)')
-legend('\tau_1','\tau_2','\tau_3')
-
+xlabel('$t(s)$','Interpreter','latex','Fontsize',12)
+ylabel('$\tau(Nm)$','Interpreter','latex','Fontsize',12)
+legend({'$\tau_1$','$\tau_2$','$\tau_3$'},'Interpreter','latex','Fontsize',12)
+% ================================================================================================
+figure(2)
 %绘制r_e
-figure
+% figure
+subplot(3,1,1)
 plot(t,result_r_e_1,':',t,result_r_e_2,'--',t,result_r_e_3,'-')
 % ylim([-50 50])
-xlabel('t(s)')
-ylabel('r_e(m)')
-legend('r_e_1','r_e_2','r_e_3')
+% xlabel('t(s)')
+ylabel('$r_e(m)$','Interpreter','latex','Fontsize',12)
+legend({'${r_e}_1$','${r_e}_2$','${r_e}_3$'},'Interpreter','latex','Fontsize',12)
 
 %绘制v_e
-figure
+% figure
+subplot(3,1,2)
 plot(t,result_v_e_1,':',t,result_v_e_2,'--',t,result_v_e_3,'-')
 % ylim([-50 50])
-xlabel('t(s)')
-ylabel('v_e(m/s)')
-legend('v_e_1','v_e_2','v_e_3')
+% xlabel('t(s)')
+ylabel('$v_e(m/s)$','Interpreter','latex','Fontsize',12)
+legend({'${v_e}_1$','${v_e}_2$','${v_e}_3$'},'Interpreter','latex','Fontsize',12)
 
 %绘制f
-figure
+% figure
+subplot(3,1,3)
 plot(t,result_f_1,':',t,result_f_2,'--',t,result_f_3,'-')
 % ylim([-50 50])
-xlabel('t(s)')
-ylabel('f(N)')
-legend('f_1','f_2','f_3')
-
+xlabel('$t(s)$','Interpreter','latex','Fontsize',12)
+ylabel('$ f(N) $','Interpreter','latex','Fontsize',12)
+legend({'$f_1$','$f_2$','$f_3$'},'Interpreter','latex','Fontsize',12)
+% ================================================================================================
+figure(3)
 %绘制d_m_tip
-figure
+% figure
+subplot(3,1,1)
 plot(t,result_d_m_tip,'-')
 % ylim([-50 50])
-xlabel('t(s)')
-ylabel('d_m')
+% xlabel('t(s)')
+ylabel('$ \hat{d}_m $','Interpreter','latex','Fontsize',12)
 
 %绘制alpha_tip
-figure
+% figure
+subplot(3,1,2)
 plot(t,result_alpha_tip,'-')
 % ylim([-50 50])
-xlabel('\itt(s)')
-ylabel('\alpha')
+% xlabel('\itt(s)')
+ylabel('$ \hat{\alpha} $','Interpreter','latex','Fontsize',12)
 
 %绘制m_tri
-
+subplot(3,1,3)
+% plot(t,0,'-')
+xlabel('$t(s)$','Interpreter','latex','Fontsize',12)
+ylabel('$ \hat{m}_Delta $','Interpreter','latex','Fontsize',12)
+% ================================================================================================
+figure(4)
 %绘制theta_tri_tip：1-3
-figure
+% figure
+subplot(3,1,1)
 plot(t,result_theta_tri_tip_1,':',t,result_theta_tri_tip_2,'--',t,result_theta_tri_tip_3,'-')
 % ylim([-2e-4 2e-4])
-xlabel('t(s)')
-ylabel('\theta_\Delta')
-legend('\theta_\Delta_1','\theta_\Delta_2','\theta_\Delta_3')
+% xlabel('t(s)')
+ylabel('$\theta_\Delta$','Interpreter','latex','Fontsize',12)
+legend({'$\hat{\theta}_{\Delta_1}$','$\hat{\theta}_{\Delta_2}$','$\hat{\theta}_{\Delta_3}$'}, ...
+    'Interpreter','latex','Fontsize',12)
 
 %绘制theta_tri_tip:4-6
-figure
+% figure
+subplot(3,1,2)
 plot(t,result_theta_tri_tip_4,':',t,result_theta_tri_tip_5,'--',t,result_theta_tri_tip_6,'-')
 ylim([-2e-4 2e-4])
-xlabel('t(s)')
-ylabel('\theta_\Delta')
-legend('\theta_\Delta_4','\theta_\Delta_5','\theta_\Delta_6')
+% xlabel('t(s)')
+ylabel('$ \hat{\theta}_\Delta $','Interpreter','latex','Fontsize',12)
+legend({'$ \hat{\theta}_{\Delta_4} $','$ \hat{\theta}_{\Delta_5} $','$ \hat{\theta}_{\Delta_6} $'}, ...
+    'Interpreter','latex','Fontsize',12)
 
 %绘制rho_tip
-figure
+% figure
+subplot(3,1,3)
 plot(t,result_rho_tip_1,':',t,result_rho_tip_2,'--',t,result_rho_tip_3,'-')
 % ylim([-2e-4 2e-4])
-xlabel('t(s)')
+xlabel('$t(s)$','Interpreter','latex','Fontsize',12)
 ylabel('$ \hat{\rho} $','Interpreter','latex','Fontsize',12)
 legend({'$ \hat{\rho}_1 $','$ \hat{\rho}_2 $','$ \hat{\rho}_3 $'},'Interpreter','latex','Fontsize',12)
