@@ -72,17 +72,10 @@ omega_e=[0.02 -0.02 0.02]';
 
 I_3=eye(3);
 
-% 正常增益
 K_1=20*I_3;
 K_2=200*I_3;
 Lambda_1=0.05*I_3;
 Lambda_2=0.2*I_3;
-
-% %较小增益
-% K_1=10*I_3;
-% K_2=100*I_3;
-% Lambda_1=0.025*I_3;
-% Lambda_2=0.1*I_3;
 
 k=0.1;
 gamma_1=0.02;
@@ -93,6 +86,11 @@ theta_tri_tip=zeros(7,1);
 rho_tip=zeros(3,1);
 alpha_tip=0;
 d_m_tip=0;
+
+v_1=[0.5 0.5 0.5 15 15 15];
+K_p=diag(v_1);
+v_2=[2 2 2 200 200 200];
+K_d=diag(v_2);
 %===============
 
 %控制器u
@@ -180,8 +178,7 @@ A_tip=[O_3 O_3;
 K=[K_1 O_3;
     O_3 K_2];
 
-u=((I_6+A_tip)^-1)*(-k*C_2'*e_1-K*s-Y*(theta_0+theta_tri_tip)- ...
-    d_m_tip*sign(s)-alpha_tip*(1+norm(p_t,2))*norm(omega-omega_e,2)^2*sign(s));
+u=-K_p*e_1-K_d*e_2;
 
 f=u(1:3,1);
 tau=u(4:6,1);
@@ -221,13 +218,6 @@ dd_m_tip=gamma_4*norm(s,1);
 phi_e_1=atand(R(1,2)/R(1,1));
 phi_e_2=-asind(R(1,3));
 phi_e_3=atand(R(2,3)/R(3,3));
-% a=rotm2eul(R);
-% phi_e_1=a(3);
-% phi_e_2=-a(2);
-% phi_e_3=a(1);
-% phi_e_1=atan2d(R(1,1),R(1,2));
-% phi_e_2=-asind(R(1,3));
-% phi_e_3=atan2d(R(3,3),R(2,3));
 
 % 保存结果
 result_phi_e_1=[result_phi_e_1,phi_e_1];
@@ -253,24 +243,6 @@ result_v_e_3=[result_v_e_3,v_e(3,1)];
 result_f_1=[result_f_1,f(1)];
 result_f_2=[result_f_2,f(2)];
 result_f_3=[result_f_3,f(3)];
-
-result_d_m_tip=[result_d_m_tip,d_m_tip];
-
-result_alpha_tip=[result_alpha_tip,alpha_tip];
-
-% m_tri_tip
-result_theta_tri_tip_1=[result_theta_tri_tip_1,theta_tri_tip(1)];
-
-result_theta_tri_tip_2=[result_theta_tri_tip_2,theta_tri_tip(2)];
-result_theta_tri_tip_3=[result_theta_tri_tip_3,theta_tri_tip(3)];
-result_theta_tri_tip_4=[result_theta_tri_tip_4,theta_tri_tip(4)];
-result_theta_tri_tip_5=[result_theta_tri_tip_5,theta_tri_tip(5)];
-result_theta_tri_tip_6=[result_theta_tri_tip_6,theta_tri_tip(6)];
-result_theta_tri_tip_7=[result_theta_tri_tip_7,theta_tri_tip(7)];
-
-result_rho_tip_1=[result_rho_tip_1,rho_tip(1)];
-result_rho_tip_2=[result_rho_tip_2,rho_tip(2)];
-result_rho_tip_3=[result_rho_tip_3,rho_tip(3)];
 
 % ===============================================================
 
@@ -310,7 +282,7 @@ legend({'$ {\Phi_e}_1 $','$ {\Phi_e}_2 $','$ {\Phi_e}_3 $'},'Interpreter','latex
 % figure
 subplot(3,1,2)
 plot(t,result_omega_e_1,':',t,result_omega_e_2,'--',t,result_omega_e_3,'-')
-% ylim([-0.2 0.2])
+% ylim([-50 50])
 % xlabel('t(s)')
 ylabel('$\omega_e $(rad/s)','Interpreter','latex','Fontsize',12)
 legend({'${\omega_e}_1$','${\omega_e}_2$','${\omega_e}_3$'},'Interpreter','latex','Fontsize',12)
@@ -338,7 +310,7 @@ legend({'${r_e}_1$','${r_e}_2$','${r_e}_3$'},'Interpreter','latex','Fontsize',12
 % figure
 subplot(3,1,2)
 plot(t,result_v_e_1,':',t,result_v_e_2,'--',t,result_v_e_3,'-')
-% ylim([-5 5])
+% ylim([-50 50])
 % xlabel('t(s)')
 ylabel('$v_e$(m/s)','Interpreter','latex','Fontsize',12)
 legend({'${v_e}_1$','${v_e}_2$','${v_e}_3$'},'Interpreter','latex','Fontsize',12)
@@ -352,56 +324,3 @@ xlabel('$t(s)$','Interpreter','latex','Fontsize',12)
 ylabel('$ f $(N) ','Interpreter','latex','Fontsize',12)
 legend({'$f_1$','$f_2$','$f_3$'},'Interpreter','latex','Fontsize',12)
 % ================================================================================================
-figure(3)
-%绘制d_m_tip
-% figure
-subplot(3,1,1)
-plot(t,result_d_m_tip,'-')
-% ylim([-50 50])
-% xlabel('t(s)')
-ylabel('$ \hat{d}_m $','Interpreter','latex','Fontsize',12)
-
-%绘制alpha_tip
-% figure
-subplot(3,1,2)
-plot(t,result_alpha_tip,'-')
-% ylim([-50 50])
-% xlabel('\itt(s)')
-ylabel('$ \hat{\alpha} $','Interpreter','latex','Fontsize',12)
-
-%绘制m_tri_tip
-subplot(3,1,3)
-% plot(t,0,'-')
-plot(t,result_theta_tri_tip_1,'-')
-xlabel('$t(s)$','Interpreter','latex','Fontsize',12)
-ylabel('$ \hat{m}_\Delta $','Interpreter','latex','Fontsize',12)
-% ================================================================================================
-figure(4)
-%绘制theta_tri_tip：2-4
-% figure
-subplot(3,1,1)
-plot(t,result_theta_tri_tip_2,':',t,result_theta_tri_tip_3,'--',t,result_theta_tri_tip_4,'-')
-% ylim([-2e-4 2e-4])
-% xlabel('t(s)')
-ylabel('$ \hat{\theta}_\Delta $','Interpreter','latex','Fontsize',12)
-legend({'$\hat{\theta}_{\Delta_1}$','$\hat{\theta}_{\Delta_2}$','$\hat{\theta}_{\Delta_3}$'}, ...
-    'Interpreter','latex','Fontsize',12)
-
-%绘制theta_tri_tip:5-7
-% figure
-subplot(3,1,2)
-plot(t,result_theta_tri_tip_5,':',t,result_theta_tri_tip_6,'--',t,result_theta_tri_tip_7,'-')
-ylim([-2e-4 2e-4])
-% xlabel('t(s)')
-ylabel('$ \hat{\theta}_\Delta $','Interpreter','latex','Fontsize',12)
-legend({'$ \hat{\theta}_{\Delta_4} $','$ \hat{\theta}_{\Delta_5} $','$ \hat{\theta}_{\Delta_6} $'}, ...
-    'Interpreter','latex','Fontsize',12)
-
-%绘制rho_tip
-% figure
-subplot(3,1,3)
-plot(t,result_rho_tip_1,':',t,result_rho_tip_2,'--',t,result_rho_tip_3,'-')
-% ylim([-2e-4 2e-4])
-xlabel('$t(s)$','Interpreter','latex','Fontsize',12)
-ylabel('$ \hat{\rho} $','Interpreter','latex','Fontsize',12)
-legend({'$ \hat{\rho}_1 $','$ \hat{\rho}_2 $','$ \hat{\rho}_3 $'},'Interpreter','latex','Fontsize',12)
